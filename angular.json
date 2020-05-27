@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "projects": {
+    "vgames": {
+      "projectType": "application",
+      "schematics": {
+        "@nrwl/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/vgames",
+      "sourceRoot": "apps/vgames/src",
+      "prefix": "casc8",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/apps/vgames",
+            "index": "apps/vgames/src/index.html",
+            "main": "apps/vgames/src/main.ts",
+            "polyfills": "apps/vgames/src/polyfills.ts",
+            "tsConfig": "apps/vgames/tsconfig.app.json",
+            "aot": true,
+            "assets": ["apps/vgames/src/favicon.ico", "apps/vgames/src/assets"],
+            "styles": ["apps/vgames/src/styles.scss"],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/vgames/src/environments/environment.ts",
+                  "with": "apps/vgames/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "vgames:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "vgames:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "vgames:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "apps/vgames/tsconfig.app.json",
+              "apps/vgames/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/vgames/**"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/vgames/jest.config.js",
+            "tsConfig": "apps/vgames/tsconfig.spec.json",
+            "passWithNoTests": true,
+            "setupFile": "apps/vgames/src/test-setup.ts"
+          }
+        }
+      }
+    },
+    "vgames-e2e": {
+      "root": "apps/vgames-e2e",
+      "sourceRoot": "apps/vgames-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/vgames-e2e/cypress.json",
+            "tsConfig": "apps/vgames-e2e/tsconfig.e2e.json",
+            "devServerTarget": "vgames:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "vgames:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/vgames-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/vgames-e2e/**"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "schematics": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  },
+  "defaultProject": "vgames"
+}
