@@ -86,6 +86,10 @@
     </li>
   </ul>
   <h2>Next Steps</h2>
+  <nav>
+    <a routerLink="/home">Go Home!</a>
+  </nav>
+  <button (click)="goHome()">go back</button>
   <p>Here are some things you can do with Nx.</p>
   <details open>
     <summary>Add UI library</summary>
@@ -116,3 +120,5 @@ ng affected:e2e
     >
   </details>
 </main>
+
+<router-outlet></router-outlet>
