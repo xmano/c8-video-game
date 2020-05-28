@@ -1,1 +1,16 @@
-<p>login works!</p>
+﻿<h1>Please Sign In</h1>
+<div style ="margin: 5px; padding:5px; border: 2px solid grey; 
+  width: 100%">
+  <h2>Email</h2>
+  <input  placeholder="e-mail" type="email" 
+    name="email" value={{email}} id="email" required>
+  <h2>Password:</h2>
+  <input  placeholder="password" type="password" 
+    name="Password" value={{password}} id="password" required>
+  <div style = "text-align: right;">
+    <button id="btn-login" style ="margin: 2px;" (click)="doLogin()">
+      Login
+    </button>
+  </div>
+</div>
+
