@@ -3,7 +3,13 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class GameServiceService {
+export class GameService {
 
-  constructor() { }
+  constructor() { 
+
+  }
+
+  signOut() {
+    
+  }
 }
