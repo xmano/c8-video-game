@@ -1,2 +1,30 @@
 ﻿<h1>Video Game Gallery</h1>
-<p>home works!</p>
+  <div style ="margin: 5px; padding:5px; border: 2px solid grey; 
+    width: 100%" >
+    <h2>Title</h2>
+    <input  placeholder="title" type="text" name="Title" 
+      id="title" [(ngModel)]='title'>
+    <h2>Synopsis:</h2>
+    <textarea id="desc" name="synopsis" rows="4" 
+      cols="50" [(ngModel)]='desc'></textarea>
+    <div style = "text-align: right;">
+      <button style ="margin: 2px;" (click)="doUpdate(-1)">Add</button>
+    </div>
+  </div>
+
+  <div style ="margin: 5px; padding:5px; border: 2px solid grey; 
+    width: 100%" *ngFor="let t of titles; let i=index; trackBy: trackByIdx">
+    <h2>Title</h2>
+    <input  placeholder="title" type="text" name="Title" 
+      id="title" value={{t.title}}>
+    <h2>Synopsis:</h2>
+    <textarea id="desc" name="synopsis" rows="4" 
+      cols="50">{{t.desc}}</textarea>
+    <div style = "text-align: right;">
+      <button style ="margin: 2px;" (click)="doUpdate(i)">Update</button>
+      <button (click)="doDel(i)">Delete</button>
+    </div>
+  </div>
+  
+
+

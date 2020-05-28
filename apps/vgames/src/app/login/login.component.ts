@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   constructor(private router: Router,
     private gs: GameService) { 
-    this.email = "m@m";
+    this.email = "";
     this.password = "";
   }
 
@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit {
   doLogin() {
     console.log(this.email, this.password);
     this.gs.signIn(this.email, this.password);
-    this.router.navigateByUrl("home");
   }
 
 }
