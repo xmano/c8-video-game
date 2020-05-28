@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
 
   doLogin() {
     console.log(this.email, this.password);
-    this.gs.doSignIn();
+    this.gs.signIn(this.email, this.password);
     this.router.navigateByUrl("home");
   }
 
