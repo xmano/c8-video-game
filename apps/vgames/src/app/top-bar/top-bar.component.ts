@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { GameService } from '../service/game-service.service';
+﻿import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-top-bar',
@@ -8,7 +8,7 @@ import { GameService } from '../service/game-service.service';
 })
 export class TopBarComponent implements OnInit {
 
-  constructor(private gs: GameService) { 
+  constructor(private auth: AuthService) { 
 
   }
 
@@ -16,7 +16,7 @@ export class TopBarComponent implements OnInit {
   }
 
   doLogOut() {
-    this.gs.signOut();
+    this.auth.signOut();
   }
 
 }

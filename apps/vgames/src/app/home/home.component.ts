@@ -15,19 +15,18 @@ export class HomeComponent implements OnInit {
   titles$: Observable<any>
 
   constructor(private gs: GameService) {
-    this.title = "Batman";
-    this.desc = "Adventure Movie";
-
-    //this.titles = <VideoTitle>[];
+    this.title = "";
+    this.desc = "";
   }
 
   ngOnInit(): void {
-    //Fetch all the mock Video Game titles.
+    //Mock Video Game titles.
     //this.titles = this.gs.fetchTitles1();
 
     //Do a FS title fetch
     this.titles$ = this.gs.fetchTitles();
     this.titles$.subscribe(data => {
+      //console.log(data);
       this.titles = data;
     })
   }

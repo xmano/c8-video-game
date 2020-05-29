@@ -1,11 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 
-import { Observable } from 'rxjs';
-import { map, tap, scan, mergeMap, throttleTime } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { VideoTitle } from '../model/model';
 
 @Injectable({
@@ -13,54 +9,25 @@ import { VideoTitle } from '../model/model';
 })
 export class GameService {
   authUser: any;
-  user$: Observable<any>;
 
-  constructor(private afAuth: AngularFireAuth,
-    private afs: AngularFirestore,
-    private router: Router) { 
+  constructor(private afs: AngularFirestore) { 
 
-    // Get the auth state, then fetch the Firestore user document or return null
-    this.user$ = this.afAuth.authState;
-    this.user$.subscribe(user => {
-      if (user) {
-        this.authUser = user.uid;
-        this.router.navigateByUrl("home");
-      } else {
-        this.authUser = null;
-        this.router.navigateByUrl("");
-      }
-    })
   }
 
-  async signIn(email: string, password: string) {
-    await this.afAuth.signInWithEmailAndPassword(email, 
-                        password);
-  }  
-
-  async signOut() {
-    await this.afAuth.signOut();
+  /**
+   * Helper function to cache the uid.
+   * @param uid : User uid of logged in user.
+   */
+  setauthUid(uid: string) {
+    this.authUser = uid;
+    return true;
   }
-
-  fetchTitles1() {
-    return [
-      {
-        title: "test",
-        desc: "Awesome test"
-      },
-      {
-        title: "test1",
-        desc: "Awesome test1"
-      }
-    ];
-  }  
 
   /**
    * Fetches all the Game Titles available in the store.
    */  
   fetchTitles() {
-    //return [];
-
-    let obs = this.afs.collection("titles")
+    let obs = this.afs.collection("titles", ref => ref.orderBy('by', 'asc'))
     .snapshotChanges()
     .pipe(
       map(actions => {
@@ -76,18 +43,32 @@ export class GameService {
 
   /**
    * Adds / Updates the gameTitle in the backend
-   * @param doc : details of video title
+   *   if doc.id is "", adds the new title.
+   * @param doc : details of video title;
+   *    doc properties expected to be valid on entry.
    */  
   async updateTitle(doc: VideoTitle) {
+    let update = true;
     let docRef = doc.id;
     if (docRef === "") {
       //Adding the new video game title.
       docRef = await this.afs.createId();
       doc.by = this.authUser;
+      update = false;
+    } else {
+      if (doc.by != this.authUser) {
+        return false;
+      }
     }
 
-    await this.afs.doc(`/titles/${docRef}`)
-          .set(doc, {merge: true});
+    (doc.id) || (delete doc.id);
+    if (update) {
+      await this.afs.doc(`/titles/${docRef}`)
+            .update(doc);
+    } else {
+      await this.afs.doc(`/titles/${docRef}`)
+            .set(doc, {merge: true});      
+    }
   }
 
   /**
@@ -97,10 +78,9 @@ export class GameService {
    */
   async deleteTitle(doc: VideoTitle) {
     if (doc.by != this.authUser) {
-      return;
+      return false;
     }
-
-    await this.afs.doc(`/titles/${doc.id}`).delete();
+    const path = `/titles/${doc.id}`;
+    await this.afs.doc(path).delete();
   }
-  
 }
